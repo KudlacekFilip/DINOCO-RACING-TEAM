@@ -449,60 +449,38 @@
   }
 
 /* =========================
-   MOBILE / TOUCH OPTIMIZACE
+   MOBILE MEDIA FIX
 ========================= */
-@media (max-width: 900px){
 
-    /* kazety v jedné kolonce (už máte, jen jistota) */
-    .tapes{
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
-  
-    /* video: menší výška + bez zbytečných okrajů */
-    .tape-video{
-      height: 280px;
-    }
-  
-    /* ovládání: větší dotykové plochy */
-    .pbtn,
-    .btn{
-      padding: 12px 14px;
-      font-size: 13px;
-    }
-  
-    /* slider větší pro prst */
-    .seek{
-      height: 28px;
-    }
-  
-    /* archive: místo 2 sloupců vše pod sebe */
-    .archive-layout{
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
-  
-    /* archivní řádek zjednodušit, aby se vešel */
-    .archive-item{
-      grid-template-columns: 40px 16px 120px 16px 1fr; /* číslo — typ — datum */
-      font-size: 13px;
-    }
-  
-    /* datum může na mobilu ořezat, ale zůstane čitelné */
-    .archive-item .a-date{
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+/* KAZETY: video vždy vyplní šířku, zachová poměr stran */
+.tape-media .tape-video{
+  width: 100%;
+  height: auto;          /* klíčové pro mobil */
+  aspect-ratio: 16 / 9;  /* stabilizuje layout, když se metadata ještě nenačetla */
+  object-fit: contain;
+  background: #000;
+  display: block;
+}
+
+/* ARCHIV: obrázky a videa nikdy nepřetečou šířku a nebudou obří */
+.detail-media img,
+.detail-media video{
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Na telefonu: omezit maximální výšku média, ať stránka neskáče a vše je "na obrazovku" */
+@media (max-width: 900px){
+  .detail-media img,
+  .detail-media video{
+    max-height: 70vh;   /* max 70% výšky obrazovky */
   }
-  
-  /* Touch zařízení: zrušit "hover-only" nuance, ať to není divné */
-  @media (hover: none){
-    .archive-item:hover{
-      color: rgba(255,255,255,.82);
-    }
-    .pbtn:hover,
-    .btn:hover{
-      border-color: rgba(255,255,255,.35);
-    }
+
+  /* Kazety: trochu menší "jistá" výška */
+  .tape-media .tape-video{
+    max-height: 45vh;
   }
-  
+}
