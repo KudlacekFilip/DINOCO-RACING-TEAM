@@ -3,11 +3,10 @@
 // ===============================
 const R2_BASE_URL = "https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev";
 // ===============================
-// Přesměrování na R2 jen pro KAZETY (audio01/02 + tape_01/02)
+// R2 pouze pro KAZETY (audio/video)
 // ===============================
 const R2_BASE_URL = "https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev";
 
-// sem si případně přidáte další kazety
 const R2_ONLY_FILES = new Set([
   "audio01.mp3",
   "audio02.mp3",
@@ -17,41 +16,30 @@ const R2_ONLY_FILES = new Set([
 
 function toR2Url(maybeLocalSrc) {
   if (!maybeLocalSrc) return maybeLocalSrc;
-
-  // už je to absolutní URL (http/https) -> nech
   if (/^https?:\/\//i.test(maybeLocalSrc)) return maybeLocalSrc;
 
-  // přepis jen pokud je to assets/<soubor> a ten soubor je v seznamu kazet
   if (maybeLocalSrc.startsWith("assets/")) {
-    const filename = maybeLocalSrc.replace(/^assets\//, "");
+    const filename = maybeLocalSrc.slice("assets/".length);
     if (R2_ONLY_FILES.has(filename)) {
       return `${R2_BASE_URL}/${filename}`;
     }
   }
-
-  // všechno ostatní (tj. archivní fotky/videa) nech na GitHubu
   return maybeLocalSrc;
 }
 
-function rewriteMediaSourcesToR2() {
-  // AUDIO
-  document.querySelectorAll("audio").forEach((el) => {
-    const srcAttr = el.getAttribute("src");
-    if (srcAttr) el.src = toR2Url(srcAttr);
-  });
-
-  // VIDEO
-  document.querySelectorAll("video").forEach((el) => {
-    const srcAttr = el.getAttribute("src");
-    if (srcAttr) el.src = toR2Url(srcAttr);
+function rewriteTapeMediaSourcesToR2() {
+  // přepiš jen existující kazetová media v DOM (audio + video)
+  document.querySelectorAll("audio[src], video[src]").forEach((el) => {
+    const src = el.getAttribute("src") || "";
+    const rewritten = toR2Url(src);
+    if (rewritten !== src) el.src = rewritten;
   });
 }
 
-// zavolej hned po načtení DOM
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", rewriteMediaSourcesToR2);
+  document.addEventListener("DOMContentLoaded", rewriteTapeMediaSourcesToR2);
 } else {
-  rewriteMediaSourcesToR2();
+  rewriteTapeMediaSourcesToR2();
 }
 
 
@@ -410,21 +398,27 @@ function renderDetail(item) {
   if (detailMeta) detailMeta.textContent = `${typeLabel(item.type)} • ${formatDate(item.date)}`;
 
   if (detailMedia) {
-    detailMedia.innerHTML = "";
+  detailMedia.innerHTML = "";
 
-    if (item.type === "image" && item.mediaSrc) {
-      const img = document.createElement("img");
-      img.src = toR2Url(item.mediaSrc);
-      img.alt = "";
-      detailMedia.appendChild(img);
-    } else if (item.type === "video" && item.mediaSrc) {
-      const vid = document.createElement("video");
-      vid.src = toR2Url(item.mediaSrc);
-      vid.controls = true;
-      vid.playsInline = true;
-      detailMedia.appendChild(vid);
-    }
+  // Archivní soubory vždy řeš přes absolutní URL z GitHub Pages
+  const resolveLocal = (src) => new URL(src, document.baseURI).toString();
+
+  if (item.type === "image" && item.mediaSrc) {
+    const img = document.createElement("img");
+    img.alt = "";
+    img.src = resolveLocal(item.mediaSrc);
+    detailMedia.appendChild(img);
+
+  } else if (item.type === "video" && item.mediaSrc) {
+    const vid = document.createElement("video");
+    vid.controls = true;
+    vid.playsInline = true;
+    vid.preload = "metadata";
+    vid.src = resolveLocal(item.mediaSrc);
+    detailMedia.appendChild(vid);
   }
+}
+
 
   if (detailText) detailText.textContent = "";
   if (detailAudio) detailAudio.innerHTML = "";
