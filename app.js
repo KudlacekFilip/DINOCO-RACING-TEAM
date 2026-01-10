@@ -428,7 +428,9 @@ async function loadArchiveManifest() {
   if (!archiveListEl) return;
 
   try {
-    const res = await fetch("assets/archive-manifest.json", { cache: "no-store" });
+    const manifestUrl = new URL("./assets/archive-manifest.json", window.location.href);
+    const res = await fetch(manifestUrl, { cache: "no-store" });
+
     if (!res.ok) throw new Error(`Manifest HTTP ${res.status}`);
     const data = await res.json();
     if (!Array.isArray(data)) throw new Error("Manifest není pole");
