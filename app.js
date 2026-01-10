@@ -447,9 +447,15 @@ async function loadArchiveManifest() {
     bindArchiveNav();               // ⬅️ navážeme jednou (onclick)
     if (ARCHIVE_ITEMS.length > 0) setActiveIndex(0);
   } catch (e) {
-    console.error("Nepodařilo se načíst archive-manifest.json:", e);
-    archiveListEl.innerHTML = `<div class="muted">Archivní manifest se nepodařilo načíst.</div>`;
-  }
+  console.error("Nepodařilo se načíst archive-manifest.json:", e);
+  archiveListEl.innerHTML = `
+    <div class="muted">
+      Archivní manifest se nepodařilo načíst.
+      Zkuste otevřít přímo: <br>
+      <code>${new URL("./assets/archive-manifest.json", window.location.href).toString()}</code>
+    </div>`;
+}
+
 }
 
 // init
