@@ -478,8 +478,6 @@ async function loadArchiveManifest() {
   }
 }
 
-}
-
 // init
 bindArchiveNav();
 loadArchiveManifest();
