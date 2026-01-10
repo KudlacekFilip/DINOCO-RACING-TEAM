@@ -427,21 +427,30 @@ function setActiveIndex(idx) {
 async function loadArchiveManifest() {
   if (!archiveListEl) return;
 
+  // robustní URL pro GitHub Pages v podadresáři
+  const manifestUrl = new URL("assets/archive-manifest.json", document.baseURI).toString();
+
   try {
-   const res = await fetch("./assets/archive-manifest.json", { cache: "no-store" });
+    const res = await fetch(manifestUrl, { cache: "no-store" });
 
-if (!res.ok) {
-  throw new Error(`Manifest HTTP ${res.status}`);
-}
+    if (!res.ok) {
+      throw new Error(`Manifest HTTP ${res.status} (${res.statusText})`);
+    }
 
-const text = await res.text();
+    let text = await res.text();
 
-// ochrana: kdyby server vrátil HTML místo JSONu
-if (!text.trim().startsWith("[")) {
-  throw new Error("Manifest není JSON pole (vrácený obsah nevypadá jako JSON).");
-}
+    // Odstranění BOM (častý tichý zabiják JSON.parse)
+    text = text.replace(/^\uFEFF/, "").trim();
 
-const data = JSON.parse(text);
+    if (!text.startsWith("[")) {
+      throw new Error("Manifest nevypadá jako JSON pole (server mohl vrátit HTML).");
+    }
+
+    const data = JSON.parse(text);
+
+    if (!Array.isArray(data)) {
+      throw new Error("Manifest není pole.");
+    }
 
     ARCHIVE_ITEMS = data.map((x, i) => ({
       title: String(x.title ?? String(i + 1).padStart(2, "0")),
@@ -452,16 +461,21 @@ const data = JSON.parse(text);
     }));
 
     renderArchiveList();
-    bindArchiveNav();               // ⬅️ navážeme jednou (onclick)
+    bindArchiveNav();
     if (ARCHIVE_ITEMS.length > 0) setActiveIndex(0);
+
   } catch (e) {
-  console.error("Nepodařilo se načíst archive-manifest.json:", e);
-  archiveListEl.innerHTML = `
-    <div class="muted">
-      Archivní manifest se nepodařilo načíst.
-      Zkuste otevřít přímo: <br>
-      <code>${new URL("./assets/archive-manifest.json", window.location.href).toString()}</code>
-    </div>`;
+    console.error("Nepodařilo se načíst archive-manifest.json:", e);
+
+    // Zobrazit konkrétní chybu a URL, ať to jde ihned opravit
+    archiveListEl.innerHTML = `
+      <div class="muted" style="line-height:1.4">
+        Archivní manifest se nepodařilo načíst.<br>
+        <strong>Důvod:</strong> ${String(e.message || e)}<br>
+        <strong>URL:</strong> <code>${manifestUrl}</code>
+      </div>
+    `;
+  }
 }
 
 }
