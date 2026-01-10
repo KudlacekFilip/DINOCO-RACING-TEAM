@@ -3,44 +3,57 @@
 // ===============================
 const R2_BASE_URL = "https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev";
 // ===============================
-// Přesměrování lokálních assets/* na R2 (audio + video)
+// Přesměrování na R2 jen pro KAZETY (audio01/02 + tape_01/02)
 // ===============================
+const R2_BASE_URL = "https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev";
+
+// sem si případně přidáte další kazety
+const R2_ONLY_FILES = new Set([
+  "audio01.mp3",
+  "audio02.mp3",
+  "tape_01.mp4",
+  "tape_02.mp4",
+]);
+
 function toR2Url(maybeLocalSrc) {
-    if (!maybeLocalSrc) return maybeLocalSrc;
-  
-    // už je to absolutní URL (http/https) -> nech
-    if (/^https?:\/\//i.test(maybeLocalSrc)) return maybeLocalSrc;
-  
-    // pokud je to assets/..., přesměruj na R2
-    if (maybeLocalSrc.startsWith("assets/")) {
-      const filename = maybeLocalSrc.replace(/^assets\//, "");
+  if (!maybeLocalSrc) return maybeLocalSrc;
+
+  // už je to absolutní URL (http/https) -> nech
+  if (/^https?:\/\//i.test(maybeLocalSrc)) return maybeLocalSrc;
+
+  // přepis jen pokud je to assets/<soubor> a ten soubor je v seznamu kazet
+  if (maybeLocalSrc.startsWith("assets/")) {
+    const filename = maybeLocalSrc.replace(/^assets\//, "");
+    if (R2_ONLY_FILES.has(filename)) {
       return `${R2_BASE_URL}/${filename}`;
     }
-  
-    // jinak nech beze změny
-    return maybeLocalSrc;
   }
-  
-  function rewriteMediaSourcesToR2() {
-    // AUDIO
-    document.querySelectorAll("audio").forEach((el) => {
-      const srcAttr = el.getAttribute("src");
-      if (srcAttr) el.src = toR2Url(srcAttr);
-    });
-  
-    // VIDEO
-    document.querySelectorAll("video").forEach((el) => {
-      const srcAttr = el.getAttribute("src");
-      if (srcAttr) el.src = toR2Url(srcAttr);
-    });
-  }
-  
-  // zavolej hned po načtení DOM
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", rewriteMediaSourcesToR2);
-  } else {
-    rewriteMediaSourcesToR2();
-  }
+
+  // všechno ostatní (tj. archivní fotky/videa) nech na GitHubu
+  return maybeLocalSrc;
+}
+
+function rewriteMediaSourcesToR2() {
+  // AUDIO
+  document.querySelectorAll("audio").forEach((el) => {
+    const srcAttr = el.getAttribute("src");
+    if (srcAttr) el.src = toR2Url(srcAttr);
+  });
+
+  // VIDEO
+  document.querySelectorAll("video").forEach((el) => {
+    const srcAttr = el.getAttribute("src");
+    if (srcAttr) el.src = toR2Url(srcAttr);
+  });
+}
+
+// zavolej hned po načtení DOM
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", rewriteMediaSourcesToR2);
+} else {
+  rewriteMediaSourcesToR2();
+}
+
 
 // =====================================================
 // KAZETY: audio + video sync + slider + LED + CRT class
