@@ -428,12 +428,20 @@ async function loadArchiveManifest() {
   if (!archiveListEl) return;
 
   try {
-    const manifestUrl = new URL("./assets/archive-manifest.json", window.location.href);
-    const res = await fetch(manifestUrl, { cache: "no-store" });
+   const res = await fetch("./assets/archive-manifest.json", { cache: "no-store" });
 
-    if (!res.ok) throw new Error(`Manifest HTTP ${res.status}`);
-    const data = await res.json();
-    if (!Array.isArray(data)) throw new Error("Manifest není pole");
+if (!res.ok) {
+  throw new Error(`Manifest HTTP ${res.status}`);
+}
+
+const text = await res.text();
+
+// ochrana: kdyby server vrátil HTML místo JSONu
+if (!text.trim().startsWith("[")) {
+  throw new Error("Manifest není JSON pole (vrácený obsah nevypadá jako JSON).");
+}
+
+const data = JSON.parse(text);
 
     ARCHIVE_ITEMS = data.map((x, i) => ({
       title: String(x.title ?? String(i + 1).padStart(2, "0")),
