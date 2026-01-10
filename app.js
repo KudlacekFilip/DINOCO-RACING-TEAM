@@ -2,46 +2,6 @@
 // Cloudflare R2 – BASE URL
 // ===============================
 const R2_BASE_URL = "https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev";
-// ===============================
-// R2 pouze pro KAZETY (audio/video)
-// ===============================
-const R2_BASE_URL = "https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev";
-
-const R2_ONLY_FILES = new Set([
-  "audio01.mp3",
-  "audio02.mp3",
-  "tape_01.mp4",
-  "tape_02.mp4",
-]);
-
-function toR2Url(maybeLocalSrc) {
-  if (!maybeLocalSrc) return maybeLocalSrc;
-  if (/^https?:\/\//i.test(maybeLocalSrc)) return maybeLocalSrc;
-
-  if (maybeLocalSrc.startsWith("assets/")) {
-    const filename = maybeLocalSrc.slice("assets/".length);
-    if (R2_ONLY_FILES.has(filename)) {
-      return `${R2_BASE_URL}/${filename}`;
-    }
-  }
-  return maybeLocalSrc;
-}
-
-function rewriteTapeMediaSourcesToR2() {
-  // přepiš jen existující kazetová media v DOM (audio + video)
-  document.querySelectorAll("audio[src], video[src]").forEach((el) => {
-    const src = el.getAttribute("src") || "";
-    const rewritten = toR2Url(src);
-    if (rewritten !== src) el.src = rewritten;
-  });
-}
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", rewriteTapeMediaSourcesToR2);
-} else {
-  rewriteTapeMediaSourcesToR2();
-}
-
 
 // =====================================================
 // KAZETY: audio + video sync + slider + LED + CRT class
