@@ -462,21 +462,45 @@
   display: block;
 }
 
-/* ARCHIV: obrázky a videa nikdy nepřetečou šířku a nebudou obří */
+/* Detail média vždy zůstane v rámci a nerozbije layout */
+.detail-media{
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Obrázky + videa v detailu: vždy responsivní, bez přetékání */
 .detail-media img,
 .detail-media video{
+  display: block;
   width: 100%;
   max-width: 100%;
   height: auto;
-  display: block;
   object-fit: contain;
 }
 
-/* Na telefonu: omezit maximální výšku média, ať stránka neskáče a vše je "na obrazovku" */
+/* Na telefonu zafixujeme "výstavní rám" pro média,
+   aby se stránka při přepínání položek neskákala */
 @media (max-width: 900px){
+  .archive-layout{
+    grid-template-columns: 1fr;
+  }
+
+  .archive-detail{
+    min-height: auto;
+  }
+
+  /* Rám pro médium – stabilní výška podle viewportu */
+  .detail-media{
+    max-height: 60vh;   /* upravte 55–75vh podle pocitu */
+  }
+
   .detail-media img,
   .detail-media video{
-    max-height: 70vh;   /* max 70% výšky obrazovky */
+    max-height: 60vh;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* nikdy neřež, jen přizpůsob */
   }
 
   /* Kazety: trochu menší "jistá" výška */
