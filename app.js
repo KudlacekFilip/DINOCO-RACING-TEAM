@@ -736,10 +736,10 @@ let activeIndex = -1;
 // ===============================
 // ARCHIVE config
 // ===============================
-const ARCHIVE_BASE_PATH = "assets/archive/";
+const ARCHIVE_BASE_PATH = `${R2_BASE_URL}/`;
 // Index soubor s reálnými názvy souborů (rok se bere z názvu):
 // [{"code":"00","file":"00__2019_image.jpg"}, {"code":"01","file":"01__2020_video.mp4"}, ...]
-const ARCHIVE_INDEX_URL = "assets/archive-index.json";
+const ARCHIVE_INDEX_URL = `${R2_BASE_URL}/archive-index.json`;
 
 const ARCHIVE_SECTIONS = [
   {
@@ -925,7 +925,7 @@ function renderDetail(item) {
     detailMedia.innerHTML = "";
     detailMedia.dataset.archive = item.code || "";
 
-    const resolveLocal = (src) => new URL(src, document.baseURI).toString();
+    const resolveLocal = (src) => src;
 
     if (item.type === "image" && item.mediaSrc) {
       const img = document.createElement("img");
