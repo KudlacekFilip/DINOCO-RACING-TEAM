@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Kazety + Archive</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="container">
+    <h1 class="project-title">PROJEKT *117</h1>
+    <p class="muted intro">
+      Při poslechu nahrávek můžete současně procházet archiv fotografií a videí. Audiostopa Vás provede příběhem závodního týmu Dinoco Racing z různých pohledů a&nbsp;v průběhu poslechu se objevují narativní značky, které odkazují na konkrétní materiály&nbsp;v archivu. Ty slouží k dokreslení atmosféry, situací a detailů, které samotný zvuk nebo obraz nedokážou zachytit samostatně. Archiv je možné procházet volně, nebo reagovat přímo na odkazy zaznívající&nbsp;v nahrávkách a nechat se vést příběhem skrze zvuk i obraz zároveň.
+    </p>
+  </header>
+
+  <main class="container">
+
+    <!-- KAZETY (FULL-BLEED) -->
+    <section class="fullbleed" aria-label="Kazety full-bleed">
+      <div class="fullbleed-inner">
+        <section class="tapes" aria-label="Kazety">
+
+          <!-- KAZETA 1 -->
+          <article class="tape-card" data-side="A">
+            <span class="led" aria-hidden="true"></span>
+
+            <button class="tape-button" type="button"
+                    data-audio-a="#audioTape1A"
+                    data-audio-b="#audioTape1B"
+                    aria-label="Play/Pause – Kazeta 1">
+              <div class="tape-media">
+                <video class="tape-video" data-side="A"
+                        src="https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev/01_A.mp4"
+                        loop muted playsinline preload="metadata"
+                        poster="assets/tape_01A_poster.jpg"></video>
+
+                <video class="tape-video" data-side="B"
+                        src="https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev/01_B.mp4"
+                        loop muted playsinline preload="metadata"
+                        poster="assets/tape_01B_poster.jpg"></video>
+              </div>
+              <span class="tape-label">01 – Chronologický rozbor závodního týmu</span>
+              <span class="tape-status" data-status>Ready</span>
+            </button>
+
+            <div class="player" data-player data-audio-a="#audioTape1A" data-audio-b="#audioTape1B">
+              <div class="player-controls">
+                <div class="controls-center">
+                  <button type="button" class="pbtn" data-back-fast aria-label="Fast backwards">&laquo;</button>
+                  <button type="button" class="pbtn" data-back aria-label="Zpět 10 sekund">&laquo; 10s</button>
+                  <button type="button" class="pbtn" data-toggle aria-label="Play/Pause">Play</button>
+                  <button type="button" class="pbtn" data-forward aria-label="Vpřed 10 sekund">10s &raquo;</button>
+                  <button type="button" class="pbtn" data-forward-fast aria-label="Fast forward">&raquo;</button>
+                  <button type="button" class="pbtn" data-stop aria-label="Stop">■</button>
+                </div>
+
+                <button class="pbtn side-toggle" type="button" data-side-toggle aria-label="Otočit kazetu" data-side-label>
+                  SIDE A
+                </button>
+              </div>
+
+              <div class="player-row">
+                <span class="time" data-current>0:00</span>
+                <input class="seek" type="range" min="0" max="100" value="0" step="0.1" data-seek aria-label="Posun v audionahrávce 1">
+                <span class="time" data-duration>0:00</span>
+              </div>
+            </div>
+
+            <audio id="audioTape1A"
+  src="https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev/01_A.mp3"
+  preload="metadata"></audio>
+
+            <audio id="audioTape1B"
+  src="https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev/01_B.mp3"
+  preload="metadata"></audio>
+          </article>
+
+          <!-- KAZETA 2 -->
+          <article class="tape-card" data-side="A">
+            <span class="led" aria-hidden="true"></span>
+
+            <button class="tape-button" type="button"
+                    data-audio-a="#audioTape2A"
+                    data-audio-b="#audioTape2B"
+                    aria-label="Play/Pause – Kazeta 2">
+              <div class="tape-media">
+                <video class="tape-video" data-side="A"
+  src="https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev/02_A.mp4"
+  loop muted playsinline preload="metadata"
+                   poster="assets/tape_02A_poster.jpg"></video>
+
+                <video class="tape-video" data-side="B"
+  src="https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev/02_B.mp4"
+  loop muted playsinline preload="metadata"
+                   poster="assets/tape_02B_poster.jpg"></video>
+              </div>
+              <span class="tape-label">02 – Rozhovory s jednotlivými členy týmu</span>
+              <span class="tape-status" data-status>Ready</span>
+            </button>
+
+            <div class="player" data-player data-audio-a="#audioTape2A" data-audio-b="#audioTape2B">
+              <div class="player-controls">
+                <div class="controls-center">
+                  <button type="button" class="pbtn" data-back-fast aria-label="Fast backwards">&laquo;</button>
+                  <button type="button" class="pbtn" data-back aria-label="Zpět 10 sekund">&laquo; 10s</button>
+                  <button type="button" class="pbtn" data-toggle aria-label="Play/Pause">Play</button>
+                  <button type="button" class="pbtn" data-forward aria-label="Vpřed 10 sekund">10s &raquo;</button>
+                  <button type="button" class="pbtn" data-forward-fast aria-label="Fast forward">&raquo;</button>
+                  <button type="button" class="pbtn" data-stop aria-label="Stop">■</button>
+                </div>
+
+                <button class="pbtn side-toggle" type="button" data-side-toggle aria-label="Otočit kazetu" data-side-label>
+                  SIDE A
+                </button>
+              </div>
+
+              <div class="player-row">
+                <span class="time" data-current>0:00</span>
+                <input class="seek" type="range" min="0" max="100" value="0" step="0.1" data-seek aria-label="Posun v audionahrávce 2">
+                <span class="time" data-duration>0:00</span>
+              </div>
+            </div>
+
+            <audio id="audioTape2A"
+  src="https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev/02_A.mp3"
+  preload="metadata"></audio>
+
+            <audio id="audioTape2B"
+  src="https://pub-8117836d46bf42729082eee29fd41cf7.r2.dev/02_B.mp3"
+  preload="metadata"></audio>
+          </article>
+
+        </section>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ARCHIVE -->
+    <section class="archive" aria-label="Archive">
+      <div class="archive-header">
+        <h2>Archive</h2>
+        <div class="archive-controls">
+          <button type="button" class="btn" id="prevItem">◀ Předchozí</button>
+          <button type="button" class="btn" id="nextItem">Další ▶</button>
+        </div>
+      </div>
+
+      <div class="archive-layout">
+        <nav class="archive-list" aria-label="Seznam položek" id="archiveList"></nav>
+
+        <article class="archive-detail" aria-live="polite">
+          <h3 id="detailTitle"></h3>
+          <p class="muted" id="detailMeta"></p>
+
+          <div class="detail-media" id="detailMedia"></div>
+
+          <p id="detailText" class="detail-text"></p>
+
+          <div class="detail-audio" id="detailAudio"></div>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="container footer">
+    <small class="muted">@kudlacekfilipp</small>
+  </footer>
+
+  <script src="app.js?v=20260110-3"></script>
+</body>
+</html>
